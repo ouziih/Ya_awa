@@ -4,6 +4,7 @@ import AppHeader from './components/AppHeader.vue';
 import AppFooter from './components/AppFooter.vue';
 import CategoryCard from './components/CategoryCard.vue';
 import productCard from './components/productCard.vue';
+import { computed , ref} from 'vue';
 
 const props = defineProps({
   categories: {
@@ -16,11 +17,36 @@ const props = defineProps({
         }
 });
 
+const categoryId = ref(null);
+
+function toggle(id) {
+    if (categoryId.value === id) {
+    categoryId.value = null;
+} else {
+    categoryId.value = id;
+}
+}
+
+
+const products = computed(()=>{
+  if (!categoryId.value) {
+    return props.products;
+  }
+  return props.products.filter(
+      (product)=> product.categorie_id == categoryId.value
+    );
+});
+
+function touchePress(event){
+  console.log(event.key);
+  
+}
+
 </script>
 
 <template>
     <div>
-  <AppHeader />
+  <AppHeader @recherche="touchePress()"/>
   <main id="main-content" tabindex="-1">
    <div class="container page-space">groupes
     <!-- DEMANDE 01 — À PROGRAMMER : Lier le nom, le slogan, le logo et les images avec les données de la boutique. -->
@@ -96,6 +122,7 @@ const props = defineProps({
      <div class="categories">
       <CategoryCard v-for="categorie in props.categories" :key="categorie.id"
       :categorie = "categorie"
+      @filtre="toggle"
       />
 
      </div>
@@ -120,7 +147,7 @@ const props = defineProps({
      </div>
      <div class="product-grid">
       <!-- DEMANDE 02 / 05 — À PROGRAMMER : Transformer cette carte en ProductCard, déclarer les props et émettre add. Répéter les cartes depuis les données. -->
-      <productCard v-for="product in props.products" :key="product.id"
+      <productCard v-for="product in products" :key="product.id"
       :product = "product"/>
 
      </div>

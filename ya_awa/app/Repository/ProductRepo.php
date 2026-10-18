@@ -6,6 +6,6 @@ use App\Models\Product;
 
 class ProductRepo{
     public function all(){
-        return Product::query()->get()->toArray();
+        return Product::query()->where('active',true)->get()->toArray();
     }
 }

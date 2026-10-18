@@ -1,5 +1,7 @@
 <template>
-  <button class="category" :style="{ '--category-color': categorie.color }">
+  <button class="category" :style="{ '--category-color': categorie.color }"
+  @click="emit('filtre',categorie.id)"
+  >
        <img :alt="categorie.name" height="48" :src="categorie.image" width="56"/>
        <span>
         {{ categorie.name }}
@@ -14,4 +16,6 @@ defineProps({
         required: true,
     },
 });
+
+const emit = defineEmits(["filtre"]);
 </script>
