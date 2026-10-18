@@ -17,8 +17,8 @@ const props = defineProps({
 })
 
 const tarif = computed(() => {
-  if (props.product.salePrice !== null) {
-    return Math.ceil(((props.product.price - props.product.salePrice) * 100) / props.product.price)
+  if (props.product.sale_price !== null) {
+    return Math.ceil(((props.product.price - props.product.sale_price) * 100) / props.product.price)
   }
 });
 
@@ -31,7 +31,7 @@ const tarif = computed(() => {
             <a :aria-label="product.name" href="#">
                 <img :alt="product.name" height="240" loading="lazy" :src="product.image" width="360" />
             </a>
-            <span v-if="product.salePrice" class="promo-tag">
+            <span v-if="product.sale_price" class="promo-tag">
                 Promo −{{ tarif }} %
             </span>
         </div>
@@ -53,9 +53,9 @@ const tarif = computed(() => {
                 {{(product.stock == 0) ? "Rupture" : (product.stock <= 5) ? "Stock faible" : "Disponible" }} </span>
                     <div class="product-bottom">
                         <div>
-                            <del v-if="product.salePrice">{{product.price}}</del>
+                            <del v-if="product.sale_price">{{product.price}}</del>
                             <strong>
-                                {{(product.salePrice ? product.salePrice : product.price)}} FCFA
+                                {{(product.sale_price ? product.sale_price : product.price)}} FCFA
                             </strong>
                         </div>
                         <button aria-label="Ajouter Riz brisé parfumé au panier" class="add-button "
