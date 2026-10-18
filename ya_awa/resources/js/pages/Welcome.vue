@@ -2,6 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import AppHeader from './components/AppHeader.vue';
 import AppFooter from './components/AppFooter.vue';
+import BoutonFiltre from './components/BoutonFiltre.vue';
 import CategoryCard from './components/CategoryCard.vue';
 import productCard from './components/productCard.vue';
 import { computed , ref} from 'vue';
@@ -19,6 +20,7 @@ const props = defineProps({
 
 const categoryId = ref(null);
 const searchTerm = ref('');
+const filtre = ref('tous');
 
 function toggle(id) {
     if (categoryId.value === id) {
@@ -26,6 +28,10 @@ function toggle(id) {
 } else {
     categoryId.value = id;
 }
+}
+
+function changerFiltre(nouveauFiltre) {
+    filtre.value = nouveauFiltre;
 }
 
 
@@ -36,8 +42,11 @@ const products = computed(()=>{
     const matchesCategory = categoryId.value === null
       || product.categorie_id === categoryId.value;
     const matchesSearch = product.name.toLowerCase().includes(finalSearchTerm);
+    const correspondAuFiltre = filtre.value === 'tous'
+      || (filtre.value === 'disponibles' && product.stock > 0)
+      || (filtre.value === 'promotion' && product.sale_price !== null);
 
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesSearch && correspondAuFiltre;
   });
 });
 
@@ -147,6 +156,28 @@ function touchePress(value) {
         </path>
        </svg>
       </a>
+     </div>
+     <div class="filters">
+      <BoutonFiltre
+       :actif="filtre === 'tous'"
+       @cliquer="changerFiltre('tous')"
+      >
+       Tous
+      </BoutonFiltre>
+
+      <BoutonFiltre
+       :actif="filtre === 'disponibles'"
+       @cliquer="changerFiltre('disponibles')"
+      >
+       Disponibles
+      </BoutonFiltre>
+      
+      <BoutonFiltre
+       :actif="filtre === 'promotion'"
+       @cliquer="changerFiltre('promotion')"
+      >
+       En promotion
+      </BoutonFiltre>
      </div>
      <div class="product-grid">
       <!-- DEMANDE 02 / 05 — À PROGRAMMER : Transformer cette carte en ProductCard, déclarer les props et émettre add. Répéter les cartes depuis les données. -->
