@@ -7,7 +7,7 @@ use App\Models\Categorie;
 class CategoryRepo{
 
     public function all(){
-        return ["categories"=>$this->categories()];
+        return $this->categories();
     }
 
      public function categories(){

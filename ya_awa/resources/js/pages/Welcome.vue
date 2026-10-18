@@ -2,6 +2,15 @@
 import { Head } from '@inertiajs/vue3';
 import AppHeader from './components/AppHeader.vue';
 import AppFooter from './components/AppFooter.vue';
+import CategoryCard from './components/CategoryCard.vue';
+
+const props = defineProps({
+  categories: {
+            type: Array,
+            required: true,
+        }
+});
+
 </script>
 
 <template>
@@ -80,36 +89,10 @@ import AppFooter from './components/AppFooter.vue';
      </div>
      <!-- DEMANDE 01 / 03 — À PROGRAMMER : Utiliser les catégories de l’API pour les images, la couleur CSS et le filtre. -->
      <div class="categories">
-      <a class="category" href="categories/cereales.html" style="--category-color: #b98a38">
-       <img alt="" height="48" src="assets/images/cereales.svg" width="56"/>
-       <span>
-        Céréales
-       </span>
-      </a>
-      <a class="category" href="categories/legumes.html" style="--category-color: #468060">
-       <img alt="" height="48" src="assets/images/legumes.svg" width="56"/>
-       <span>
-        Légumes
-       </span>
-      </a>
-      <a class="category" href="categories/epicerie.html" style="--category-color: #b65c3a">
-       <img alt="" height="48" src="assets/images/epicerie.svg" width="56"/>
-       <span>
-        Épicerie
-       </span>
-      </a>
-      <a class="category" href="categories/poisson.html" style="--category-color: #477d87">
-       <img alt="" height="48" src="assets/images/poisson.svg" width="56"/>
-       <span>
-        Poisson
-       </span>
-      </a>
-      <a class="category" href="categories/saveurs-locales.html" style="--category-color: #956687">
-       <img alt="" height="48" src="assets/images/local.svg" width="56"/>
-       <span>
-        Saveurs locales
-       </span>
-      </a>
+      <CategoryCard v-for="categorie in props.categories" :key="categorie.id"
+      :categorie = "categorie"
+      />
+
      </div>
     </section>
     <section id="catalogue">
