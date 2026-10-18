@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -36,6 +37,7 @@ class Order extends Model
         'stock_applied' => 'boolean',
         'stock_restored' => 'boolean',
         'canceled_at' => 'datetime',
+        'statut' => OrderStatus::class,
     ];
 
     public function deliveryZone(): BelongsTo
