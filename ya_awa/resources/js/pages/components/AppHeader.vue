@@ -1,5 +1,5 @@
 <script setup>
-
+const emit = defineEmits(['recherche']);
 </script>
 <template>
     <div>
@@ -35,13 +35,13 @@
                 </a>
             </nav>
             <div class="header-actions">
-                <a aria-label="Aperçu de la recherche" class="icon-button" href="#recherche-apercu">
-                    <svg aria-hidden="true" class="icon" fill="none" height="20" stroke="currentColor"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24" width="20">
-                        <path d="m21 21-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0">
-                        </path>
-                    </svg>
-                </a>
+                <input
+                    aria-label="Rechercher un produit"
+                    class="search-input"
+                    placeholder="Rechercher un produit..."
+                    type="search"
+                    @input="emit('recherche', $event.target.value)"
+                >
                 <a aria-label="Voir la variante de thème" class="icon-button" href="exemples/theme-sombre.html">
                     <svg aria-hidden="true" class="icon" fill="none" height="20" stroke="currentColor"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24" width="20">

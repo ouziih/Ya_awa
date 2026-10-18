@@ -18,6 +18,7 @@ const props = defineProps({
 });
 
 const categoryId = ref(null);
+const searchTerm = ref('');
 
 function toggle(id) {
     if (categoryId.value === id) {
@@ -29,24 +30,26 @@ function toggle(id) {
 
 
 const products = computed(()=>{
-  if (!categoryId.value) {
-    return props.products;
-  }
-  return props.products.filter(
-      (product)=> product.categorie_id == categoryId.value
-    );
+  const finalSearchTerm = searchTerm.value.trim().toLowerCase();
+
+  return props.products.filter((product) => {
+    const matchesCategory = categoryId.value === null
+      || product.categorie_id === categoryId.value;
+    const matchesSearch = product.name.toLowerCase().includes(finalSearchTerm);
+
+    return matchesCategory && matchesSearch;
+  });
 });
 
-function touchePress(event){
-  console.log(event.key);
-  
+function touchePress(value) {
+  searchTerm.value = value;
 }
 
 </script>
 
 <template>
     <div>
-  <AppHeader @recherche="touchePress()"/>
+  <AppHeader @recherche="touchePress"/>
   <main id="main-content" tabindex="-1">
    <div class="container page-space">groupes
     <!-- DEMANDE 01 — À PROGRAMMER : Lier le nom, le slogan, le logo et les images avec les données de la boutique. -->
