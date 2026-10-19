@@ -21,6 +21,7 @@ const props = defineProps({
 const categoryId = ref(null);
 const searchTerm = ref('');
 const filtre = ref('tous');
+const tri = ref('aucun');
 
 function toggle(id) {
     if (categoryId.value === id) {
@@ -34,11 +35,15 @@ function changerFiltre(nouveauFiltre) {
     filtre.value = nouveauFiltre;
 }
 
+function changerTri(nouveauTri) {
+    tri.value = nouveauTri;
+}
+
 
 const products = computed(()=>{
   const finalSearchTerm = searchTerm.value.trim().toLowerCase();
 
-  return props.products.filter((product) => {
+  const produitsFiltres = props.products.filter((product) => {
     const matchesCategory = categoryId.value === null
       || product.categorie_id === categoryId.value;
     const matchesSearch = product.name.toLowerCase().includes(finalSearchTerm);
@@ -48,7 +53,27 @@ const products = computed(()=>{
 
     return matchesCategory && matchesSearch && correspondAuFiltre;
   });
+
+  return produitsFiltres.sort((premierProduit, deuxiemeProduit) => {
+    if (tri.value === 'alphabetique') {
+        return premierProduit.name.localeCompare(deuxiemeProduit.name);
+    }
+
+    if (tri.value === 'prix-croissant') {
+        return prixProduit(premierProduit) - prixProduit(deuxiemeProduit);
+    }
+
+    if (tri.value === 'prix-decroissant') {
+        return prixProduit(deuxiemeProduit) - prixProduit(premierProduit);
+    }
+
+    return 0;
+  });
 });
+
+function prixProduit(product) {
+    return product.sale_price ?? product.price;
+}
 
 function touchePress(value) {
   searchTerm.value = value;
@@ -178,6 +203,17 @@ function touchePress(value) {
       >
        En promotion
       </BoutonFiltre>
+      <select
+       :value="tri"
+       aria-label="Trier les produits"
+       class="tri"
+       @change="changerTri($event.target.value)"
+      >
+       <option value="aucun">Trier par</option>
+       <option value="prix-croissant">Prix croissant</option>
+       <option value="prix-decroissant">Prix décroissant</option>
+       <option value="alphabetique">Ordre alphabétique</option>
+      </select>
      </div>
      <div class="product-grid">
       <!-- DEMANDE 02 / 05 — À PROGRAMMER : Transformer cette carte en ProductCard, déclarer les props et émettre add. Répéter les cartes depuis les données. -->
