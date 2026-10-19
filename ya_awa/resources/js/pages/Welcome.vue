@@ -5,7 +5,7 @@ import AppFooter from './components/AppFooter.vue';
 import BoutonFiltre from './components/BoutonFiltre.vue';
 import CategoryCard from './components/CategoryCard.vue';
 import productCard from './components/productCard.vue';
-import { computed , ref} from 'vue';
+import { computed, reactive } from 'vue';
 
 const props = defineProps({
   categories: {
@@ -18,52 +18,54 @@ const props = defineProps({
         }
 });
 
-const categoryId = ref(null);
-const searchTerm = ref('');
-const filtre = ref('tous');
-const tri = ref('aucun');
+const filtres = reactive({
+    recherche: '',
+    categorie: null,
+    type: 'tous',
+    tri: 'aucun',
+});
 
 function toggle(id) {
-    if (categoryId.value === id) {
-    categoryId.value = null;
-} else {
-    categoryId.value = id;
-}
+    if (filtres.categorie === id) {
+        filtres.categorie = null;
+    } else {
+        filtres.categorie = id;
+    }
 }
 
 function changerFiltre(nouveauFiltre) {
-    filtre.value = nouveauFiltre;
+    filtres.type = nouveauFiltre;
 }
 
 function changerTri(nouveauTri) {
-    tri.value = nouveauTri;
+    filtres.tri = nouveauTri;
 }
 
 
 const products = computed(()=>{
-  const finalSearchTerm = searchTerm.value.trim().toLowerCase();
+  const finalSearchTerm = filtres.recherche.trim().toLowerCase();
 
   const produitsFiltres = props.products.filter((product) => {
-    const matchesCategory = categoryId.value === null
-      || product.categorie_id === categoryId.value;
+    const matchesCategory = filtres.categorie === null
+      || product.categorie_id === filtres.categorie;
     const matchesSearch = product.name.toLowerCase().includes(finalSearchTerm);
-    const correspondAuFiltre = filtre.value === 'tous'
-      || (filtre.value === 'disponibles' && product.stock > 0)
-      || (filtre.value === 'promotion' && product.sale_price !== null);
+    const correspondAuFiltre = filtres.type === 'tous'
+      || (filtres.type === 'disponibles' && product.stock > 0)
+      || (filtres.type === 'promotion' && product.sale_price !== null);
 
     return matchesCategory && matchesSearch && correspondAuFiltre;
   });
 
   return produitsFiltres.sort((premierProduit, deuxiemeProduit) => {
-    if (tri.value === 'alphabetique') {
+    if (filtres.tri === 'alphabetique') {
         return premierProduit.name.localeCompare(deuxiemeProduit.name);
     }
 
-    if (tri.value === 'prix-croissant') {
+    if (filtres.tri === 'prix-croissant') {
         return prixProduit(premierProduit) - prixProduit(deuxiemeProduit);
     }
 
-    if (tri.value === 'prix-decroissant') {
+    if (filtres.tri === 'prix-decroissant') {
         return prixProduit(deuxiemeProduit) - prixProduit(premierProduit);
     }
 
@@ -76,7 +78,7 @@ function prixProduit(product) {
 }
 
 function touchePress(value) {
-  searchTerm.value = value;
+  filtres.recherche = value;
 }
 
 </script>
@@ -184,27 +186,27 @@ function touchePress(value) {
      </div>
      <div class="filters">
       <BoutonFiltre
-       :actif="filtre === 'tous'"
+       :actif="filtres.type === 'tous'"
        @cliquer="changerFiltre('tous')"
       >
        Tous
       </BoutonFiltre>
 
       <BoutonFiltre
-       :actif="filtre === 'disponibles'"
+       :actif="filtres.type === 'disponibles'"
        @cliquer="changerFiltre('disponibles')"
       >
        Disponibles
       </BoutonFiltre>
       
       <BoutonFiltre
-       :actif="filtre === 'promotion'"
+       :actif="filtres.type === 'promotion'"
        @cliquer="changerFiltre('promotion')"
       >
        En promotion
       </BoutonFiltre>
       <select
-       :value="tri"
+       :value="filtres.tri"
        aria-label="Trier les produits"
        class="tri"
        @change="changerTri($event.target.value)"
