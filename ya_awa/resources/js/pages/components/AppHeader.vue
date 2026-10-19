@@ -1,4 +1,11 @@
 <script setup>
+defineProps({
+    recherche: {
+        type: String,
+        required: true,
+    },
+});
+
 const emit = defineEmits(['recherche']);
 </script>
 <template>
@@ -39,6 +46,7 @@ const emit = defineEmits(['recherche']);
                     aria-label="Rechercher un produit"
                     class="search-input"
                     placeholder="Rechercher un produit..."
+                    :value="recherche"
                     type="search"
                     @input="emit('recherche', $event.target.value)"
                 >

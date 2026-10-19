@@ -41,6 +41,13 @@ function changerTri(nouveauTri) {
     filtres.tri = nouveauTri;
 }
 
+function reinitialiserFiltres() {
+    filtres.recherche = '';
+    filtres.categorie = null;
+    filtres.type = 'tous';
+    filtres.tri = 'aucun';
+}
+
 
 const products = computed(()=>{
   const finalSearchTerm = filtres.recherche.trim().toLowerCase();
@@ -85,7 +92,10 @@ function touchePress(value) {
 
 <template>
     <div>
-  <AppHeader @recherche="touchePress"/>
+  <AppHeader
+   :recherche="filtres.recherche"
+   @recherche="touchePress"
+  />
   <main id="main-content" tabindex="-1">
    <div class="container page-space">groupes
     <!-- DEMANDE 01 — À PROGRAMMER : Lier le nom, le slogan, le logo et les images avec les données de la boutique. -->
@@ -216,6 +226,13 @@ function touchePress(value) {
        <option value="prix-decroissant">Prix décroissant</option>
        <option value="alphabetique">Ordre alphabétique</option>
       </select>
+      <button
+       class="btn secondary small-btn"
+       type="button"
+       @click="reinitialiserFiltres"
+      >
+       Réinitialiser
+      </button>
      </div>
      <p class="muted small">
       {{ products.length }} résultat(s)
