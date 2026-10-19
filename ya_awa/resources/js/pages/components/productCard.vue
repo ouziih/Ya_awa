@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { Link } from '@inertiajs/vue3';
 const props = defineProps({
   product:
   {
@@ -28,21 +29,28 @@ const tarif = computed(() => {
 <template>
     <article class="product-card">
         <div class="product-media">
-            <a :aria-label="product.name" href="#">
+            <Link 
+            :href="`/produits/${product.id}`"
+            :aria-label="product.name"
+            >
                 <img :alt="product.name" height="240" loading="lazy" :src="product.image" width="360" />
-            </a>
+
+            </Link>
             <span v-if="product.sale_price" class="promo-tag">
                 Promo −{{ tarif }} %
             </span>
         </div>
         <div class="product-body">
             <p class="overline">
-                {{product.origin}}
+                {{product.origine}}
             </p>
             <h3>
-                <a href="#">
+                <Link 
+                :href="`/produits/${product.id}`"
+                :aria-label="product.name"
+                >
                     {{product.name}}
-                </a>
+                </Link>
             </h3>
             <p class="muted small">
                 {{product.unit}} · {{product.stock}} disponible(s)

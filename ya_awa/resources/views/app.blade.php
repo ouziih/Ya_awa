@@ -10,7 +10,8 @@
 
         @fonts
 
-        @vite(['resources/css/style.css', 'resources/css/template.css', 'resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
+        @vite(['resources/css/style.css', 'resources/css/template.css', 'resources/js/app.ts'
+        ])
         <x-inertia::head>
             <title>{{ config('app.name', 'Laravel') }}</title>
         </x-inertia::head>

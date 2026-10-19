@@ -15,4 +15,10 @@ class MenuController extends Controller
             "products"=>$products->all()
             ]);
     }
+
+    public function show(ProductRepo $products,int $id){
+        return Inertia::render('components/ProductFiche',[
+            "product"=>$products->show($id)
+            ]);
+    }
 }
