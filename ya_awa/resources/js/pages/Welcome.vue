@@ -215,11 +215,18 @@ function touchePress(value) {
        <option value="alphabetique">Ordre alphabétique</option>
       </select>
      </div>
+     <p class="muted small">
+      {{ products.length }} résultat(s)
+     </p>
      <div class="product-grid">
       <!-- DEMANDE 02 / 05 — À PROGRAMMER : Transformer cette carte en ProductCard, déclarer les props et émettre add. Répéter les cartes depuis les données. -->
       <productCard v-for="product in products" :key="product.id"
       :product = "product"/>
 
+     </div>
+     <div v-if="products.length === 0" class="state">
+      <h3>Aucun produit trouvé</h3>
+      <p>Modifie ta recherche ou tes filtres pour voir d'autres produits.</p>
      </div>
     </section>
     <section class="loyalty-banner mt">
